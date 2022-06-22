@@ -53,6 +53,5 @@ def person_search():
 @app.route('/person_result')
 def person_result():
     search_size = request.args.get("search_size")
-    db.session.query(Person).filter(Person.size > search_size)
-    persons = db.session.query(Person).all()
+    persons = db.session.query(Person).filter(Person.size > search_size)
     return render_template('./person_result.html', persons=persons, search_size=search_size)
