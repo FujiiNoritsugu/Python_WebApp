@@ -65,3 +65,8 @@ def try_html():
 @app.route('/show_data', methods=["GET", "POST"])
 def show_data():
     return request.form
+
+
+@app.route('/try_css')
+def try_css():
+    return render_template('./try_css.html')
