@@ -4,8 +4,27 @@
         <title>演習用のHTML</title>
         <link rel="stylesheet" href="{{url_for('static', filename='try_css.css')}}">
         <script src={{ url_for("static", filename="try_js.js") }}></script>
+        <script src={{ url_for("static", filename="plotly-2.12.1.min.js") }}></script>
     </head>
     <body>
+        <div id="try_graph" style="width:600px;height:250px;margin: auto;"></div>
+        <script>
+            var trace = {
+                x: [1, 2, 3, 4],
+                y: [10, 15, 13, 17],
+                mode: 'lines',
+                type: 'scatter',
+                name: 'human',
+                text: ['A', 'B', 'C', 'D', 'E'],
+                marker: { size: 10 }
+            };
+            var data = [trace];
+            var layout = {
+                title:'Data Labels Hover'
+            };
+
+            Plotly.newPlot('try_graph', data, layout);
+        </script>
         テーブル<br>
         <table id="table_id">
             <tr>
