@@ -4,9 +4,25 @@
         <title>DB演習用結果表示用ファイル</title>
     </head>
     <body>
-            身長が{{search_height}}以上の人<br>
-            または<br>
-            体重が{{search_weight}}以上の人<br>
+            身長が{{search_height}}
+            {% if height_cond == 1%}
+                以上
+            {% else %}
+            以下
+            {% endif %}
+            の人<br>
+            {% if and_or == 1%}
+                かつ
+            {% else %}
+                または
+            {% endif %}<br>
+            体重が{{search_weight}}
+            {% if weight_cond == 1%}
+                以上
+            {% else %}
+            以下
+            {% endif %}
+            の人<br>            
             <table border="1">
                 <tr>
                     <th>id</th>

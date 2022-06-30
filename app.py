@@ -1,3 +1,6 @@
+import sys
+from sqlalchemy import or_, and_
+from exercise_model import Human
 from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from test_model import Person
@@ -5,6 +8,7 @@ from test_model import Person
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///exercise_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
 
@@ -54,56 +58,76 @@ def person_search():
 def person_result():
     search_size = request.args.get("search_size")
     persons = db.session.query(Person).filter(Person.size > search_size)
-    return render_template('./person_result.html', persons=persons, search_size=search_size)
+    return render_template(
+        './person_result.html',
+        persons=persons,
+        search_size=search_size)
+
 
 # ここからWebアプリ２の演習の回答例
-from exercise_model import Human
-from sqlalchemy import or_, and_
+
 
 @app.route('/human_search')
 def human_search():
     return render_template('./human_search.html')
 
+
 @app.route('/human_result')
 def human_result():
     search_height = request.args.get('search_height')
     search_weight = request.args.get('search_weight')
-    humans = db.session.query(Human).filter(or_(Human.height>=search_height, Human.weight>=search_weight))
-    return render_template('./human_result.html', humans=humans, search_height=search_height, search_weight=search_weight)
+    humans = db.session.query(Human).filter(
+        or_(Human.height >= search_height, Human.weight >= search_weight))
+    return render_template(
+        './human_result.html',
+        humans=humans,
+        search_height=search_height,
+        search_weight=search_weight)
 
 # ここからWebアプリ3の演習の回答例
+
+
 @app.route('/human_search2')
 def human_search2():
     return render_template('./human_search2.html')
 
+
 @app.route('/human_result2')
 def human_result2():
-    search_height = request.args.get('search_height')
-    search_weight = request.args.get('search_weight')
-    height_cond = request.args.get('height_cond')
-    weight_cond = request.args.get('weight_cond')
+    search_height = float(request.args.get('search_height'))
+    search_weight = float(request.args.get('search_weight'))
+    height_cond = int(request.args.get('height_cond'))
+    weight_cond = int(request.args.get('weight_cond'))
 
     def cond_fn(a, b, cond):
-        print(type(cond))
-        if cond == '1':
+        print(f'type:{type(cond)}', file=sys.stdout)
+        if cond == 1:
             return a >= b
         else:
             return a <= b
-    
+
     def height_cond_fn():
         return cond_fn(Human.height, search_height, height_cond)
 
     def weight_cond_fn():
         return cond_fn(Human.weight, search_weight, weight_cond)
 
-    and_or = request.args.get('and_or')
+    and_or = int(request.args.get('and_or'))
+    print(f'and_or:{and_or}', file=sys.stdout)
 
     def and_or_fn(a, b):
-        if and_or == '1':
+        if and_or == 1:
             return and_(a, b)
         else:
             return or_(a, b)
 
-    humans = db.session.query(Human).filter(and_or_fn(height_cond_fn(), weight_cond_fn()))
-    return render_template('./human_result2.html', humans=humans, search_height=search_height, search_weight=search_weight)
-
+    humans = db.session.query(Human).filter(
+        and_or_fn(height_cond_fn(), weight_cond_fn()))
+    return render_template(
+        './human_result2.html',
+        humans=humans,
+        search_height=search_height,
+        search_weight=search_weight,
+        height_cond=height_cond,
+        weight_cond=weight_cond,
+        and_or=and_or)
