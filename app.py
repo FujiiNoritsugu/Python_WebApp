@@ -56,7 +56,7 @@ def person_result():
     persons = db.session.query(Person).filter(Person.size > search_size)
     return render_template('./person_result.html', persons=persons, search_size=search_size)
 
-# ここから演習の回答例
+# ここからWebアプリ２の演習の回答例
 from exercise_model import Human
 from sqlalchemy import or_
 
@@ -71,4 +71,15 @@ def human_result():
     humans = db.session.query(Human).filter(or_(Human.height>=search_height, Human.weight>=search_weight))
     return render_template('./human_result.html', humans=humans, search_height=search_height, search_weight=search_weight)
 
+# ここからWebアプリ3の演習の回答例
+@app.route('/human_search2')
+def human_search2():
+    return render_template('./human_search2.html')
+
+@app.route('/human_result2')
+def human_result2():
+    search_height = request.args.get('search_height')
+    search_weight = request.args.get('search_weight')
+    humans = db.session.query(Human).filter(or_(Human.height>=search_height, Human.weight>=search_weight))
+    return render_template('./human_result2.html', humans=humans, search_height=search_height, search_weight=search_weight)
 

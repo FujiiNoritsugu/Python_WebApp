@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DB演習用htmlファイル</title>
+    </head>
+    <body>
+        <form action="http://127.0.0.1:5000/human_result">
+            検索対象：<br>
+            身長が<input type="text" value="" name="search_height"/>
+            <select name="height_cond">
+                <option value="1">以上</option>
+                <option value="2">以下</option>
+            </select>
+            <br>
+            <input type="radio" name="and_or" value="1" checked="checked">かつ
+            <input type="radio" name="and_or" value="2">または
+            <br>                
+            体重が<input type="text" value="" name="search_weight"/>
+            <select name="weight_cond">
+                <option value="1">以上</option>
+                <option value="2">以下</option>
+            </select>
+            <br>
+            <input type="submit" value="検索"/>
+        </form>
+    </body>
+</html>
