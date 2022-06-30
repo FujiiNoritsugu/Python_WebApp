@@ -1,10 +1,9 @@
 function check_input(){
-    table_obj = document.getElementById('table_id');
-    if (is_red){
-        table_obj.style.backgroundColor = "red";
-        is_red = false;
-    }else{
-        table_obj.style.backgroundColor = "";
-        is_red = true;
+    let height = document.getElementById('height_id');
+    let weight = document.getElementById('weight_id');
+    if (height.value == "" || weight.value == ""){
+        alert('身長または体重が入力されていません');
+        return false;
     }
+    return true;
 }

@@ -58,7 +58,7 @@ def person_result():
 
 # ここからWebアプリ２の演習の回答例
 from exercise_model import Human
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 @app.route('/human_search')
 def human_search():
@@ -80,6 +80,30 @@ def human_search2():
 def human_result2():
     search_height = request.args.get('search_height')
     search_weight = request.args.get('search_weight')
-    humans = db.session.query(Human).filter(or_(Human.height>=search_height, Human.weight>=search_weight))
+    height_cond = request.args.get('height_cond')
+    weight_cond = request.args.get('weight_cond')
+
+    def cond_fn(a, b, cond):
+        print(type(cond))
+        if cond == '1':
+            return a >= b
+        else:
+            return a <= b
+    
+    def height_cond_fn():
+        return cond_fn(Human.height, search_height, height_cond)
+
+    def weight_cond_fn():
+        return cond_fn(Human.weight, search_weight, weight_cond)
+
+    and_or = request.args.get('and_or')
+
+    def and_or_fn(a, b):
+        if and_or == '1':
+            return and_(a, b)
+        else:
+            return or_(a, b)
+
+    humans = db.session.query(Human).filter(and_or_fn(height_cond_fn(), weight_cond_fn()))
     return render_template('./human_result2.html', humans=humans, search_height=search_height, search_weight=search_weight)
 
