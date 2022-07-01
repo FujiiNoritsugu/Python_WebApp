@@ -2,8 +2,30 @@
 <html>
     <head>
         <title>DB演習用結果表示用ファイル</title>
+        <link rel="stylesheet" href="{{url_for('static', filename='exercise_css.css')}}">
+        <script src={{ url_for("static", filename="plotly-2.12.1.min.js") }}></script>
     </head>
     <body>
+        <div id="try_graph" style="width:600px;height:250px;margin: auto;"></div>
+        <script>
+            var trace = {
+                x: [{{x_list}}],
+                y: [{{y_list}}],
+                mode: 'markers',
+                type: 'scatter',
+                name: 'human',
+                {% autoescape false %}
+                text: [{{name_list}}],
+                {% endautoescape %}
+                marker: { size: 10 }
+            };
+            var data = [trace];
+            var layout = {
+                title:'Data Labels Hover'
+            };
+            Plotly.newPlot('try_graph', data, layout);
+        </script>
+
             身長が{{search_height}}
             {% if height_cond == 1%}
                 以上

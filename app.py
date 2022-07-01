@@ -123,6 +123,21 @@ def human_result2():
 
     humans = db.session.query(Human).filter(
         and_or_fn(height_cond_fn(), weight_cond_fn()))
+    
+    def make_list(name, as_str=False):
+        def _convert(param):
+            if as_str:
+                result = f"'{param}'"
+            else:
+                result = param
+            return result
+
+        return ','.join([_convert(str(getattr(human, name))) for human in humans])
+
+    x_list = make_list('height')
+    y_list = make_list('weight')
+    name_list = make_list('name', as_str=True)
+
     return render_template(
         './human_result2.html',
         humans=humans,
@@ -130,4 +145,8 @@ def human_result2():
         search_weight=search_weight,
         height_cond=height_cond,
         weight_cond=weight_cond,
-        and_or=and_or)
+        and_or=and_or,
+        x_list=x_list,
+        y_list=y_list,
+        name_list=name_list)
+
