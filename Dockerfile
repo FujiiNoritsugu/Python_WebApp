@@ -7,4 +7,5 @@ COPY static static
 COPY templates templates
 COPY app.py app.py
 COPY test_db test_db
+COPY test_model.py test_model.py
 CMD [ "python3", "-m", "flask", "run", "--host=0.0.0.0"]
