@@ -1,0 +1,12 @@
+docker container ls
+docker images(docker image ls)
+docker ps (--all)
+docker rm：コンテナの削除
+例： docker rm $(docker ps -a -q) ※-qは整数値のIDのみ表示
+docker rmi：イメージの削除
+例：docker rmi $(docker images -q)
+docker tag (fromタグ) (toタグ)：タグ付け
+docker run --rm -d --network (ネットワーク名) --name (コンテナ名) -p (ホストのポート):(コンテナのポート) (イメージ名)
+docker stop (コンテナ名): コンテナの停止
+docker restart (コンテナ名): コンテナの再起動
+docker exec -it (コンテナ名) bash: コンテナ内での実行、この場合はbashを立ち上げてコンテナの中に入る
