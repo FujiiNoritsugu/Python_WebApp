@@ -1,14 +1,13 @@
-# coding: utf-8
 from sqlalchemy import Column, Float, Integer, Text
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column
+from sqlalchemy.orm.base import Mapped
 
 Base = declarative_base()
-metadata = Base.metadata
 
 
 class Person(Base):
     __tablename__ = 'person'
 
-    id = Column(Integer, primary_key=True)
-    name = Column(Text, nullable=False)
-    size = Column(Float)
+    name = mapped_column(Text, nullable=False)
+    id = mapped_column(Integer, primary_key=True)
+    size = mapped_column(Float)

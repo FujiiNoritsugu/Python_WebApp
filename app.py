@@ -1,11 +1,11 @@
 from flask import Flask, request, render_template, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from mysql_model import Person
+from test_model import Person
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:p%40ssw0rd1@mysqldb/test_mysql?charset=utf8mb4'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+engine = create_engine("sqlite:///test_db")
 
 
 @app.route('/')
@@ -53,7 +53,8 @@ def person_search():
 @app.route('/person_result')
 def person_result():
     search_size = request.args.get("search_size")
-    persons = db.session.query(Person).filter(Person.size > search_size)
+    with Session(engine) as session:
+        persons = session.query(Person).filter(Person.size > search_size)
     return render_template('./person_result.html', persons=persons, search_size=search_size)
 
 
