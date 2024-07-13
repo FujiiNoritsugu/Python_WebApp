@@ -1,15 +1,12 @@
 from flask import Flask, request, render_template, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from test_model import Person, Base
-from sqlalchemy import Column, Float, Integer, Text, create_engine, inspect
+from test_model import Person
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app, model_class=Base)
+engine = create_engine("sqlite:///test_db")
 
-# db.init_app(app)
 
 @app.route('/')
 def index():
@@ -55,10 +52,9 @@ def person_search():
 
 @app.route('/person_result')
 def person_result():
-    inspector = inspect(db.get_engine())
-    print(f"tables:{inspector.get_table_names()}")
     search_size = request.args.get("search_size")
-    persons = db.session.query(Person).filter(Person.size > search_size)
+    with Session(engine) as session:
+        persons = session.query(Person).filter(Person.size > search_size)
     return render_template('./person_result.html', persons=persons, search_size=search_size)
 
 
